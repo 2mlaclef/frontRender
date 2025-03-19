@@ -1,43 +1,106 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 
 const InscriptionForm = () => {
-    const [formData, setFormData] = useState({
-        nom: '',
-        prenom: '',
-        classe: '',
-        adresse: '',
-        telephone: ''
-    });
+  // Déclaration de l'état pour les données du formulaire
+  const [formData, setFormData] = useState({
+    nom: "",
+    prenom: "",
+    classe: "",
+    adresse: "",
+    telephone: "",
+  });
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+  // Récupération de l'URL du backend depuis les variables d'environnement
+  const API_URL = import.meta.env.VITE_API_URL;
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await axios.post('http://localhost:5000/api/etudiants', formData);
-            alert('Inscription réussie !');
-            setFormData({ nom: '', prenom: '', classe: '', adresse: '', telephone: '' });
-        } catch (error) {
-            console.error(error);
-        }
-    };
+  // Gestion des changements dans les champs du formulaire
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    return (
-        <div style={{ maxWidth: '400px', margin: 'auto', padding: '20px', border: '1px solid #ccc', borderRadius: '10px' }}>
-            <h2>Formulaire d'inscription</h2>
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="nom" placeholder="Nom" value={formData.nom} onChange={handleChange} required /><br/>
-                <input type="text" name="prenom" placeholder="Prénom" value={formData.prenom} onChange={handleChange} required /><br/>
-                <input type="text" name="classe" placeholder="Classe" value={formData.classe} onChange={handleChange} required /><br/>
-                <input type="text" name="adresse" placeholder="Adresse" value={formData.adresse} onChange={handleChange} required /><br/>
-                <input type="tel" name="telephone" placeholder="Téléphone" value={formData.telephone} onChange={handleChange} required /><br/>
-                <button type="submit">S'inscrire</button>
-            </form>
-        </div>
-    );
+  // Gestion de la soumission du formulaire
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Envoi des données vers le backend
+      await axios.post(`${API_URL}/api/etudiants`, formData);
+      alert("Inscription réussie !");
+      // Réinitialisation du formulaire après soumission
+      setFormData({
+        nom: "",
+        prenom: "",
+        classe: "",
+        adresse: "",
+        telephone: "",
+      });
+    } catch (error) {
+      console.error("Erreur lors de la soumission :", error);
+    }
+  };
+
+  // Rendu du formulaire
+  return (
+    <div
+      style={{
+        maxWidth: "400px",
+        margin: "auto",
+        padding: "20px",
+        border: "1px solid #ccc",
+        borderRadius: "10px",
+      }}
+    >
+      <h2>Formulaire d'inscription</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="nom"
+          placeholder="Nom"
+          value={formData.nom}
+          onChange={handleChange}
+          required
+        />
+        <br />
+        <input
+          type="text"
+          name="prenom"
+          placeholder="Prénom"
+          value={formData.prenom}
+          onChange={handleChange}
+          required
+        />
+        <br />
+        <input
+          type="text"
+          name="classe"
+          placeholder="Classe"
+          value={formData.classe}
+          onChange={handleChange}
+          required
+        />
+        <br />
+        <input
+          type="text"
+          name="adresse"
+          placeholder="Adresse"
+          value={formData.adresse}
+          onChange={handleChange}
+          required
+        />
+        <br />
+        <input
+          type="tel"
+          name="telephone"
+          placeholder="Téléphone"
+          value={formData.telephone}
+          onChange={handleChange}
+          required
+        />
+        <br />
+        <button type="submit">S'inscrire</button>
+      </form>
+    </div>
+  );
 };
 
 export default InscriptionForm;
